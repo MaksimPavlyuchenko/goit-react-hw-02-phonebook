@@ -9,6 +9,8 @@ class ContactForm extends Component {
   handleSubmit =(e)=>{
     e.preventDefault();
     const{name,number}=this.state;
+    console.log(name)
+    console.log(number)
    
   }
   handleChange=(evt)=>{
