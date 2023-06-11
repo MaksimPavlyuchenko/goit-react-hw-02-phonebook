@@ -1,6 +1,15 @@
-export const App = () => {
-  return (
-    <div
+import { Component } from "react";
+
+import ContactForm from "./ContactForm/ContactForm";
+
+ class App extends Component {
+  state = {
+    contacts: [],
+    filter: ''
+  }
+  render() {
+    return (
+      <div
       style={{
         height: '100vh',
         display: 'flex',
@@ -10,7 +19,9 @@ export const App = () => {
         color: '#010101'
       }}
     >
-      React homework template
+      <ContactForm/>
     </div>
-  );
-};
+    )
+
+}}
+export default App;
