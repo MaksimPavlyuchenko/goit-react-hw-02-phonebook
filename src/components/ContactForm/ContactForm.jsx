@@ -1,57 +1,42 @@
 import { Component } from 'react';
-import { nanoid } from 'nanoid';
 
+import { Form, Input, Button } from './ContactForm.styled';
+
+const INITIAL_STATE = { name: '' };
 class ContactForm extends Component {
-  state = {
-    name: '',
-    number: '',
-  };
-  handleSubmit =(e)=>{
-    e.preventDefault();
-    const{name,number}=this.state;
-    console.log(name)
-    console.log(number)
-   
-  }
-  handleChange=(evt)=>{
-    const { name, value } = evt.target;
+  state = { ...INITIAL_STATE };
+
+  handleChange = event => {
+    const { name, value } = event.currentTarget;
     this.setState({ [name]: value });
-  }
+  };
+  handleSubmit = evt => {
+    evt.preventDefault();
+    this.props.onSubmit(this.state);
+    this.reset();
+  };
+  reset = () => {
+    this.setState({ ...INITIAL_STATE });
+  };
 
   render() {
-    const NameId = nanoid();
-    const TelId =nanoid();
-    const {name,number}=this.state;
     return (
-      <form onSubmit={this.handleSubmit}>
-        <label htmlFor={NameId}>
-            Name
-          <input
+      <Form onSubmit={this.handleSubmit}>
+        <label>
+          Contact Name
+          <Input
+            autoFocus
             type="text"
             name="name"
             pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
             title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
             required
-            id={NameId}
-            value={name}
             onChange={this.handleChange}
+            value={this.state.name}
           />
         </label>
-        <label htmlFor={TelId}>
-            Telephone
-          <input
-            type="tel"
-            name="number"
-            pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-            title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-            required
-            id={TelId}
-            value={number}
-            onChange={this.handleChange}
-          />
-        </label>
-        <button type='submit'>Add contact</button>
-      </form>
+        <Button type="submit">Add contact</Button>
+      </Form>
     );
   }
 }

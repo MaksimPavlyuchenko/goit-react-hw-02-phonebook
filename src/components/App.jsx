@@ -1,27 +1,29 @@
-import { Component } from "react";
+import { Component } from 'react';
 
-import ContactForm from "./ContactForm/ContactForm";
+import ContactForm from './ContactForm/ContactForm';
 
- class App extends Component {
+class App extends Component {
   state = {
     contacts: [],
-    filter: ''
-  }
+  };
+  hendlerContactFormSubmit = data => {
+    this.setState(prevState => ({ contacts: [...prevState.contacts, data] }));
+  };
   render() {
     return (
       <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101'
-      }}
-    >
-      <ContactForm/>
-    </div>
-    )
-
-}}
+        style={{
+          height: '100vh',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          fontSize: 40,
+          color: '#010101',
+        }}
+      >
+        <ContactForm onSubmit={this.hendlerContactFormSubmit} />
+      </div>
+    );
+  }
+}
 export default App;
