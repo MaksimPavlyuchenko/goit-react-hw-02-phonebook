@@ -8,6 +8,7 @@ import { Header, HeaderList } from './App.styled';
 class App extends Component {
   state = {
     contacts: [],
+    filter: '',
   };
   handlerContactFormSubmit = data => {
     const { contacts } = this.state;
@@ -27,14 +28,21 @@ class App extends Component {
     const result = contactsArray.findIndex(contact => {
       return contact.id === buttonId;
     });
-    this.setState(prevState=>{
+    this.setState(prevState => {
       const newContacts = [...prevState.contacts];
-      newContacts.splice(result,1);
-      return {contacts:newContacts}
-    })
-   
+      newContacts.splice(result, 1);
+      return { contacts: newContacts };
+    });
+  };
+  handlerFilter = e => {
+    this.setState({ filter: e.currentTarget.value });
   };
   render() {
+    const { contacts, filter } = this.state;
+    const filterLower = filter.toLowerCase();
+    const filteredName = contacts.filter(contact => {
+      return contact.name.toLowerCase().includes(filterLower);
+    });
     return (
       <div
         style={{
@@ -51,9 +59,9 @@ class App extends Component {
         <Header>Phonebook</Header>
         <ContactForm onSubmit={this.handlerContactFormSubmit} />
         <HeaderList>Contact List</HeaderList>
-        <Filter />
+        <Filter filterData={filter} filterHandler={this.handlerFilter} />
         <ContactList
-          dataContacts={this.state.contacts}
+          dataContacts={filteredName}
           handlerDelete={this.handlerButtonDelete}
         />
       </div>
