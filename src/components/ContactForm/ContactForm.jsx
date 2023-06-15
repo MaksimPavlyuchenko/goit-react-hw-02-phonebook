@@ -1,22 +1,23 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { nanoid } from 'nanoid';
 
-import { Form, Input, Button,Label } from './ContactForm.styled';
+import { Form, Input, Button, Label } from './ContactForm.styled';
 
-const INITIAL_STATE = { name: '',number:'' };
+const INITIAL_STATE = { name: '', number: '' };
 class ContactForm extends Component {
   state = { ...INITIAL_STATE };
 
   handleChange = event => {
     const { name, value } = event.currentTarget;
-    this.setState({ [name]: value, id: nanoid() });
+    this.setState({ [name]: value });
   };
+
   handleSubmit = evt => {
     evt.preventDefault();
     this.props.onSubmit(this.state);
     this.reset();
   };
+
   reset = () => {
     this.setState({ ...INITIAL_STATE });
   };
@@ -24,7 +25,6 @@ class ContactForm extends Component {
   render() {
     return (
       <>
-       
         <Form onSubmit={this.handleSubmit}>
           <Label>
             Contact Name

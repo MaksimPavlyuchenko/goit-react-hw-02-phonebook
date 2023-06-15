@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import { nanoid } from 'nanoid';
 
 import ContactForm from './ContactForm/ContactForm';
 import ContactList from './ContactList/ContactList';
@@ -10,39 +11,53 @@ class App extends Component {
     contacts: [],
     filter: '',
   };
+
   handlerContactFormSubmit = data => {
     const { contacts } = this.state;
-    if (
-      contacts.some(contact => {
-        return contact.name === data.name;
-      })
-    ) {
-      alert(`${data.name} is alredy in contacts`);
+    const { name, number } = data;
+    const contact = { name, number, id: nanoid() };
+    const findContact = contacts.find(contact => {
+      return contact.name === name;
+    });
+
+    if (findContact) {
+      alert(`${name} is alredy in contacts`);
+      return;
     } else {
-      this.setState(prevState => ({ contacts: [...prevState.contacts, data] }));
+      this.setState(prevState => ({
+        contacts: [...prevState.contacts, contact],
+      }));
     }
   };
-  handlerButtonDelete = evt => {
-    const buttonId = evt.currentTarget.id;
+
+  handlerButtonDelete = id => {
     const contactsArray = this.state.contacts;
-    const result = contactsArray.findIndex(contact => {
-      return contact.id === buttonId;
+
+    const result = contactsArray.filter(contact => {
+      return contact.id !== id;
     });
-    this.setState(prevState => {
-      const newContacts = [...prevState.contacts];
-      newContacts.splice(result, 1);
-      return { contacts: newContacts };
+
+    this.setState({
+      contacts: result,
     });
   };
+
   handlerFilter = e => {
     this.setState({ filter: e.currentTarget.value });
   };
-  render() {
+
+  filteredName = () => {
     const { contacts, filter } = this.state;
     const filterLower = filter.toLowerCase();
     const filteredName = contacts.filter(contact => {
       return contact.name.toLowerCase().includes(filterLower);
     });
+    return filteredName;
+  };
+
+  render() {
+    const { filter } = this.state;
+
     return (
       <div
         style={{
@@ -61,7 +76,7 @@ class App extends Component {
         <HeaderList>Contact List</HeaderList>
         <Filter filterData={filter} filterHandler={this.handlerFilter} />
         <ContactList
-          dataContacts={filteredName}
+          dataContacts={this.filteredName}
           handlerDelete={this.handlerButtonDelete}
         />
       </div>
